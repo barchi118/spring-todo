@@ -1,0 +1,34 @@
+package com.example.todo_api.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.todo_api.dto.TaskCreateForm;
+import com.example.todo_api.entity.Task;
+import com.example.todo_api.mapper.TaskMapper;
+
+@Service // このクラスがサービス層のコンポーネントであることを示す
+public class TaskService {
+
+    @Autowired // TaskMapperを自動的に使う準備
+    private TaskMapper taskMapper;
+
+    /**
+     * フォームから受け取った情報でタスクを作成する
+     * 
+     * @param form Controllerから渡されたフォームデータ
+     */
+    @Transactional // このメソッド内のデータベース操作を一つの処理単位として扱う
+    public Task createTask(TaskCreateForm form) {
+        // 1. FormからEntityにデータを詰め替える
+        Task task = new Task();
+        task.setTitle(form.getTitle());
+        task.setCompleted(form.isCompleted());
+
+        // 2. Mapperを呼び出してデータベースに保存する
+        taskMapper.insert(task);
+
+        return task;
+    }
+}
