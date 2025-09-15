@@ -3,6 +3,7 @@ package com.example.todo_api.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import com.example.todo_api.form.TaskUpdateForm;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.example.todo_api.dto.TaskCreateForm;
@@ -64,4 +65,38 @@ public class TaskService {
             super(message);
         }
     }
+
+
+    /**
+     * 更新処理
+     * 
+     * @param id
+     * @param form
+     * @return
+     */
+    public Task updateTask(Long id, TaskUpdateForm form) {
+        // まず更新対象のタスクが存在するかチェック
+        Task task = findById(id);
+
+        // Formから受け取った値で上書き
+        task.setTitle(form.getTitle());
+        task.setCompleted(form.isCompleted());
+
+        taskMapper.update(task);
+        return task;
+    }
+
+
+    /**
+     * 削除用ビジネスロジック
+     * 
+     * @param id
+     */
+    public void deleteTask(Long id) {
+        // 存在チェック（なければfindByIdが例外を投げる）
+        findById(id);
+        taskMapper.deleteById(id);
+    }
 }
+
+

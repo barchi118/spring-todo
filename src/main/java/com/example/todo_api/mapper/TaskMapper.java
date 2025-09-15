@@ -1,10 +1,12 @@
 package com.example.todo_api.mapper;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import com.example.todo_api.entity.Task;
 import java.util.Optional;
 
@@ -25,7 +27,15 @@ public interface TaskMapper {
     @Select("SELECT * FROM tasks ORDER BY id")
     List<Task> findAll();
 
-    // 特定の1件のタスクを取得する
+    // 特定の1件のタスクを取得
     @Select("SELECT * FROM tasks WHERE id = #{id}")
     Optional<Task> findById(Long id); // データが見つからない可能性があるのでOptionalで囲む
+
+    // 更新
+    @Update("UPDATE tasks SET title = #{title}, completed = #{completed} WHERE id = #{id}")
+    void update(Task task);
+
+    // 削除
+    @Delete("DELETE FROM tasks WHERE id = #{id}")
+    void deleteById(Long id);
 }
