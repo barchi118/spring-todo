@@ -1,15 +1,17 @@
 package com.example.todo_api.dto;
 
+
 /**
  * タスクのエンティティ
  */
-public class Task {
+
+public class TaskResponse {
     // ID
     private Long id;
     // 名前
     private String name;
-    // tagのID
-    private Integer tagId;
+
+    private boolean completed;
 
     public Long getId() {
         return id;
@@ -25,14 +27,6 @@ public class Task {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getTagId() {
-        return tagId;
-    }
-
-    public void setTagId(Integer tagId) {
-        this.tagId = tagId;
     }
 
 

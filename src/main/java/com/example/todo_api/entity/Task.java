@@ -1,5 +1,8 @@
 package com.example.todo_api.entity; // パッケージ名が正しいか確認
 
+import lombok.Data;
+
+
 public class Task {
 
     // フィールド
@@ -7,9 +10,6 @@ public class Task {
     private String title;
     private boolean completed;
 
-    // --- ここから下が重要 ---
-
-    // ゲッターとセッター
     public Long getId() {
         return id;
     }
@@ -22,7 +22,6 @@ public class Task {
         return title;
     }
 
-    // エラーの原因となっているメソッド
     public void setTitle(String title) {
         this.title = title;
     }
@@ -31,8 +30,9 @@ public class Task {
         return completed;
     }
 
-    // エラーの原因となっているメソッド
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
+
+
 }

@@ -1,7 +1,7 @@
 package com.example.todo_api.controller;
 
 import java.net.URI;
-
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.todo_api.dto.TaskCreateForm;
+import com.example.todo_api.dto.TaskPostResponse;
 import com.example.todo_api.entity.Task;
 import com.example.todo_api.service.TaskService;
 
@@ -46,6 +47,9 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<Void> createTask(@RequestBody TaskCreateForm form) {
         Task createdTask = taskService.createTask(form);
+
+        // 2全てのタスクのリストを取得する
+        List<Task> allTasks = taskService.getAllTasks();
         // HTTPステータス201 Createdと一緒に返却
         URI locationUri = ServletUriComponentsBuilder.fromCurrentRequest() // 現在のリクエストURL
                 // (http://localhost:8080/tasks)
@@ -53,6 +57,12 @@ public class TaskController {
                 .buildAndExpand(createdTask.getId()) // "{id}" の部分に実際のIDを埋め込む
                 .toUri(); // URIに変換
 
+
+        // レスポンスボディ用のオブジェクトを作成し、情報を詰める
+        TaskPostResponse responseBody = new TaskPostResponse();
+        responseBody.setCreatedTaskUrl(locationUri.toString());
+        responseBody.setCreatedTask(createdTask);
+        responseBody.setAllTasks(allTasks);
         // HTTPステータスコードを自動で 201 Created
         // HTTPレスポンスの**Locationヘッダー**に、先ほど組み立てたURL (locationUri) を設定す
         // .build(): レスポンスオブジェクトを最終的に確定させ、Springに「これを応答として返してください」と渡す

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.todo_api.dto.TaskCreateForm;
 import com.example.todo_api.entity.Task;
 import com.example.todo_api.mapper.TaskMapper;
+import java.util.List;
 
 @Service // このクラスがサービス層のコンポーネントであることを示す
 public class TaskService {
@@ -15,7 +16,7 @@ public class TaskService {
     private TaskMapper taskMapper;
 
     /**
-     * フォームから受け取った情報でタスクを作成する
+     * フォームから受け取った情報でタスクを作成する ビジネスロジック
      * 
      * @param form Controllerから渡されたフォームデータ
      */
@@ -25,10 +26,19 @@ public class TaskService {
         Task task = new Task();
         task.setTitle(form.getTitle());
         task.setCompleted(form.isCompleted());
-
+        taskMapper.insert(task);
         // 2. Mapperを呼び出してデータベースに保存する
         taskMapper.insert(task);
 
         return task;
+    }
+
+    /**
+     * 全てのタスクを取得
+     * 
+     * @return
+     */
+    public List<Task> getAllTasks() {
+        return taskMapper.findAll();
     }
 }
