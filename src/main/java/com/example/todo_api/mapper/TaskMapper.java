@@ -1,12 +1,12 @@
 package com.example.todo_api.mapper;
 
 import java.util.List;
-import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import com.example.todo_api.entity.Task;
+import java.util.Optional;
 
 @Mapper // MyBatisにこのインターフェースをMapperとして認識させる
 public interface TaskMapper {
@@ -21,7 +21,11 @@ public interface TaskMapper {
     void insert(com.example.todo_api.entity.Task task);
 
 
-    // ★★★ 全てのタスクを取得するメソッドを追加 ★★★
+    // 全てのタスクを取得するメソッドを追加
     @Select("SELECT * FROM tasks ORDER BY id")
     List<Task> findAll();
+
+    // 特定の1件のタスクを取得する
+    @Select("SELECT * FROM tasks WHERE id = #{id}")
+    Optional<Task> findById(Long id); // データが見つからない可能性があるのでOptionalで囲む
 }

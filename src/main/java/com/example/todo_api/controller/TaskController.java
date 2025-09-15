@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +50,7 @@ public class TaskController {
     public ResponseEntity<Void> createTask(@RequestBody TaskCreateForm form) {
         Task createdTask = taskService.createTask(form);
 
-        // 2全てのタスクのリストを取得する
+        // 全てのタスクのリストを取得する
         List<Task> allTasks = taskService.getAllTasks();
         // HTTPステータス201 Createdと一緒に返却
         URI locationUri = ServletUriComponentsBuilder.fromCurrentRequest() // 現在のリクエストURL
@@ -69,4 +71,27 @@ public class TaskController {
         return ResponseEntity.created(locationUri).build();
 
     }
+
+    /**
+     * 全てのタスクを取得するAPI
+     * 
+     * @return 全タスクのリスト
+     */
+    @GetMapping
+    public List<Task> getAllTasks() {
+
+        return taskService.getAllTasks();
+    }
+
+    /**
+     * 一件タスクを取得する
+     * 
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public Task getTaskById(@PathVariable Long id) {
+        return taskService.findById(id);
+    }
+
 }

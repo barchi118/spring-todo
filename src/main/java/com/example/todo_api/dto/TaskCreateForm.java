@@ -4,6 +4,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+
+/**
+ * 新規タスク作成リクエストを受け取るためのフォームクラス。
+ */
 public class TaskCreateForm {
     // 1. フィールドをテーブルのカラムに合わせる
     @NotBlank // null, 空文字, スペースのみを許可しない
@@ -14,7 +18,6 @@ public class TaskCreateForm {
 
     private boolean completed;
 
-    // 2. ゲッターとセッターも修正する
     public String getTitle() {
         return title;
     }

@@ -1,9 +1,10 @@
 package com.example.todo_api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.bind.annotation.ResponseStatus;
 import com.example.todo_api.dto.TaskCreateForm;
 import com.example.todo_api.entity.Task;
 import com.example.todo_api.mapper.TaskMapper;
@@ -40,5 +41,27 @@ public class TaskService {
      */
     public List<Task> getAllTasks() {
         return taskMapper.findAll();
+    }
+
+    /**
+     * orElseThrowで、もしデータが見つからなければ例外を発生させる
+     * 
+     * @param id
+     * @return
+     */
+    public Task findById(Long id) {
+
+        return taskMapper.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Task not found with id: " + id));
+    }
+
+    /**
+     * Serviceファイルの下部、または別ファイルに専用の例外クラスを作成
+     */
+    @ResponseStatus(HttpStatus.NOT_FOUND) // この例外が投げられたらHTTP 404を返す
+    class TaskNotFoundException extends RuntimeException {
+        public TaskNotFoundException(String message) {
+            super(message);
+        }
     }
 }
