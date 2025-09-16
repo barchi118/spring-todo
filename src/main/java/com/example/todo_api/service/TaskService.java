@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.example.todo_api.dto.TaskCreateForm;
 import com.example.todo_api.entity.Task;
 import com.example.todo_api.mapper.TaskMapper;
+import com.example.todo_api.exception.TaskNotFoundException;
 import java.util.List;
 
 @Service // このクラスがサービス層のコンポーネントであることを示す
@@ -77,6 +78,9 @@ public class TaskService {
     public Task updateTask(Long id, TaskUpdateForm form) {
         // まず更新対象のタスクが存在するかチェック
         Task task = findById(id);
+        if (task == null) {
+            throw new TaskNotFoundException("Task not found with id: " + id);
+        }
 
         // Formから受け取った値で上書き
         task.setTitle(form.getTitle());

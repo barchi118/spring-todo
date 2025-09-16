@@ -32,10 +32,10 @@ public interface TaskMapper {
     Optional<Task> findById(Long id); // データが見つからない可能性があるのでOptionalで囲む
 
     // 更新
-    @Update("UPDATE tasks SET title = #{title}, completed = #{completed} WHERE id = #{id}")
+    // @Update("UPDATE tasks SET title = #{title}, completed = #{completed} WHERE id = #{id}")
     void update(Task task);
 
     // 削除
-    @Delete("DELETE FROM tasks WHERE id = #{id}")
+    // @Delete("DELETE FROM tasks WHERE id = #{id}")
     void deleteById(Long id);
 }

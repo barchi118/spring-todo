@@ -22,6 +22,7 @@ import com.example.todo_api.dto.TaskPostResponse;
 import com.example.todo_api.entity.Task;
 import com.example.todo_api.form.TaskUpdateForm;
 import com.example.todo_api.service.TaskService;
+import jakarta.validation.Valid;
 
 // @RestControllerはJSONやXMLを返す．例のように，文字列を返すこともできるし，オブジェクトを返すこともできる．
 @RestController
@@ -107,7 +108,7 @@ public class TaskController {
      * @return
      */
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody TaskUpdateForm form) {
+    public Task updateTask(@PathVariable Long id, @RequestBody @Valid TaskUpdateForm form) {
         return taskService.updateTask(id, form);
     }
 

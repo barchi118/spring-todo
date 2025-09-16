@@ -2,10 +2,20 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.todoapi.mapper.TaskMapper">
+<mapper namespace="com.example.todo_api.mapper.TaskMapper">
 
-    <insert id="insert" parameterType="com.example.todoapi.dto.Task" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO tasks (name, tag_id) VALUES (#{name}, #{tagId})
-    </insert>
+    <!-- 更新 -->
+    <update id="update" parameterType="com.example.todo_api.entity.Task">
+        UPDATE tasks 
+        SET 
+            title = #{title}, 
+            completed = #{completed} 
+        WHERE 
+            id = #{id}
+    </update>
+    <!-- 削除 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM tasks WHERE id = #{id}
+    </delete>
 
 </mapper>
