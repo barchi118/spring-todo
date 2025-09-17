@@ -9,13 +9,21 @@
         UPDATE tasks 
         SET 
             title = #{title}, 
-            completed = #{completed} 
+            completed = #{completed},
+            version = version + 1
         WHERE 
             id = #{id}
+        AND
+            version = #{version}
     </update>
     <!-- 削除 -->
-    <delete id="deleteById" parameterType="java.lang.Long">
-        DELETE FROM tasks WHERE id = #{id}
+    <delete id="deleteById" parameterType="com.example.todo_api.entity.Task">
+        DELETE FROM
+            tasks
+        WHERE 
+            id = #{id}
+        AND
+            version = #{version}
     </delete>
 
 </mapper>

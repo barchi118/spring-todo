@@ -21,6 +21,7 @@ import com.example.todo_api.dto.TaskCreateForm;
 import com.example.todo_api.dto.TaskPostResponse;
 import com.example.todo_api.entity.Task;
 import com.example.todo_api.form.TaskUpdateForm;
+import com.example.todo_api.form.TaskDeleteForm;
 import com.example.todo_api.service.TaskService;
 import jakarta.validation.Valid;
 
@@ -118,9 +119,11 @@ public class TaskController {
      * @param id
      */
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT) // 成功時にHTTP 204を返す
-    public void deleteTask(@PathVariable Long id) {
-        taskService.deleteTask(id);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id,
+            @RequestBody @Valid TaskDeleteForm form) {
+        taskService.deleteTask(id, form);
+        return ResponseEntity.noContent().build();
     }
 }
 

@@ -33,9 +33,9 @@ public interface TaskMapper {
 
     // 更新
     // @Update("UPDATE tasks SET title = #{title}, completed = #{completed} WHERE id = #{id}")
-    void update(Task task);
+    int update(Task task);
 
     // 削除
     // @Delete("DELETE FROM tasks WHERE id = #{id}")
-    void deleteById(Long id);
+    int deleteById(Task task);
 }

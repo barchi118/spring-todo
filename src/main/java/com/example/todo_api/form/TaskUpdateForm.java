@@ -18,6 +18,9 @@ public class TaskUpdateForm {
     @NotNull
     private boolean completed;
 
+    @NotNull
+    private Integer version;
+
     public String getTitle() {
         return title;
     }
@@ -32,6 +35,14 @@ public class TaskUpdateForm {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
 

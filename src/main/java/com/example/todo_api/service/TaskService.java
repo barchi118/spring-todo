@@ -10,7 +10,9 @@ import com.example.todo_api.dto.TaskCreateForm;
 import com.example.todo_api.entity.Task;
 import com.example.todo_api.mapper.TaskMapper;
 import com.example.todo_api.exception.TaskNotFoundException;
+import com.example.todo_api.exception.OptimisticLockException;
 import java.util.List;
+import com.example.todo_api.form.TaskDeleteForm;
 
 @Service // このクラスがサービス層のコンポーネントであることを示す
 public class TaskService {
@@ -85,8 +87,18 @@ public class TaskService {
         // Formから受け取った値で上書き
         task.setTitle(form.getTitle());
         task.setCompleted(form.isCompleted());
+        task.setVersion(form.getVersion());
 
-        taskMapper.update(task);
+        // 更新を実行し、実際に更新された行数を取得
+        int affectedRows = taskMapper.update(task);
+
+        // 4楽観ロックの競合をチェック
+        if (affectedRows == 0) {
+            // 更新件数が0件の場合、WHERE句のversionが一致しなかったことを意味する
+            throw new OptimisticLockException(
+                    "Optimistic lock conflict: The task was updated by another user.");
+        }
+
         return task;
     }
 
@@ -96,10 +108,22 @@ public class TaskService {
      * 
      * @param id
      */
-    public void deleteTask(Long id) {
+    public void deleteTask(Long id, TaskDeleteForm form) {
         // 存在チェック（なければfindByIdが例外を投げる）
-        findById(id);
-        taskMapper.deleteById(id);
+        Task task = findById(id);
+        if (task == null) {
+            throw new TaskNotFoundException("Task not found with id: " + id);
+        }
+        task.setVersion(form.getVersion());
+        task.setId(id);
+        int affectedRows = taskMapper.deleteById(task);
+
+        if (affectedRows == 0) {
+            // 更新件数が0件の場合、WHERE句のversionが一致しなかったことを意味する
+            throw new OptimisticLockException(
+                    "Optimistic lock conflict: The task was updated by another user.");
+        }
+
     }
 }
 

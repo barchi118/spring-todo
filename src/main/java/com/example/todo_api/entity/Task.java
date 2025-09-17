@@ -1,6 +1,5 @@
 package com.example.todo_api.entity; // パッケージ名が正しいか確認
 
-import lombok.Data;
 
 
 public class Task {
@@ -9,6 +8,7 @@ public class Task {
     private Long id;
     private String title;
     private boolean completed;
+    private int version;
 
     public Long getId() {
         return id;
@@ -32,6 +32,14 @@ public class Task {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
 
