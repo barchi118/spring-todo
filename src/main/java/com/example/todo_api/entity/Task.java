@@ -1,7 +1,9 @@
 package com.example.todo_api.entity; // パッケージ名が正しいか確認
 
+import java.util.List;
+import lombok.Data;
 
-
+@Data
 public class Task {
 
     // フィールド
@@ -10,37 +12,9 @@ public class Task {
     private boolean completed;
     private int version;
 
-    public Long getId() {
-        return id;
-    }
+    /** このタスクの担当者リスト (結果を格納するためのポケット) */
+    private List<User> assignees;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
-
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
-    }
 
 
 }

@@ -1,13 +1,17 @@
 package com.example.todo_api.dto;
 
+import java.util.List;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 
 /**
  * 新規タスク作成リクエストを受け取るためのフォームクラス。
  */
+
+@Data
 public class TaskCreateForm {
     // 1. フィールドをテーブルのカラムに合わせる
     @NotBlank // null, 空文字, スペースのみを許可しない
@@ -17,20 +21,8 @@ public class TaskCreateForm {
     @NotNull
 
     private boolean completed;
+    /** 紐付ける担当者のIDリスト */
+    private List<Long> assigneeIds;
 
-    public String getTitle() {
-        return title;
-    }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
 }

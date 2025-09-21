@@ -20,7 +20,7 @@ public interface TaskMapper {
     @Insert("INSERT INTO tasks (title, completed) VALUES (#{title}, #{completed})")
     // INSERT後に生成されたidが、引数で渡されたtaskオブジェクトのidフィールドに自動的にセット
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    void insert(com.example.todo_api.entity.Task task);
+    void insert(Task task);
 
 
     // 全てのタスクを取得するメソッドを追加
@@ -28,7 +28,6 @@ public interface TaskMapper {
     List<Task> findAll();
 
     // 特定の1件のタスクを取得
-    @Select("SELECT * FROM tasks WHERE id = #{id}")
     Optional<Task> findById(Long id); // データが見つからない可能性があるのでOptionalで囲む
 
     // 更新

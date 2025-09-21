@@ -7,8 +7,10 @@ import com.example.todo_api.form.TaskUpdateForm;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.example.todo_api.dto.TaskCreateForm;
+import com.example.todo_api.dto.TaskResponse;
 import com.example.todo_api.entity.Task;
 import com.example.todo_api.mapper.TaskMapper;
+import com.example.todo_api.mapper.UserMapper;
 import com.example.todo_api.exception.TaskNotFoundException;
 import com.example.todo_api.exception.OptimisticLockException;
 import java.util.List;
@@ -19,6 +21,8 @@ public class TaskService {
 
     @Autowired // TaskMapperを自動的に使う準備
     private TaskMapper taskMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * フォームから受け取った情報でタスクを作成する ビジネスロジック
@@ -31,11 +35,18 @@ public class TaskService {
         Task task = new Task();
         task.setTitle(form.getTitle());
         task.setCompleted(form.isCompleted());
-        taskMapper.insert(task);
         // 2. Mapperを呼び出してデータベースに保存する
         taskMapper.insert(task);
 
-        return task;
+        // 2. 担当者の割り当て処理
+        if (form.getAssigneeIds() != null) {
+            for (Long userId : form.getAssigneeIds()) {
+                // (ここで事前にuserIdが存在するかチェックするロジックを追加すると、より堅牢になります)
+                userMapper.assignToTask(task.getId(), userId);
+            }
+        }
+        // 3. DTOに変換して返す（findByIdを再利用して、紐付けた担当者情報も取得）
+        return findById(task.getId());
     }
 
     /**
@@ -124,6 +135,20 @@ public class TaskService {
                     "Optimistic lock conflict: The task was updated by another user.");
         }
 
+    }
+
+    /**
+     * 
+     * @param task
+     * @return
+     */
+    private TaskResponse convertToResponse(Task task) {
+        TaskResponse response = new TaskResponse();
+        response.setId(task.getId());
+        response.setTitle(task.getTitle());
+        response.setCompleted(task.isCompleted());
+        response.setAssignees(task.getAssignees()); // 担当者リストもセット
+        return response;
     }
 }
 

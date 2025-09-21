@@ -1,33 +1,25 @@
 package com.example.todo_api.dto;
 
+import java.util.List;
+import com.example.todo_api.entity.User; // Userエンティティを直接使う (より丁寧な設計ではUserResponseDTOを作る)
+import lombok.Data;
+
 
 /**
  * タスクのエンティティ
  */
 
+@Data
 public class TaskResponse {
     // ID
     private Long id;
     // 名前
-    private String name;
+    private String title;
 
     private boolean completed;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    /** このタスクの担当者リスト */
+    private List<User> assignees;
 
 
 
