@@ -37,6 +37,23 @@
             t.id = #{id}
     </select>
 
+    <!-- 全件取得 -->
+    <select id="findAll" resultMap="taskWithAssigneesResultMap">
+        SELECT
+            t.id AS task_id,
+            t.title AS task_title,
+            t.completed AS task_completed,
+            t.version AS task_version,
+            u.id AS user_id,
+            u.name AS user_name
+        FROM
+            tasks t
+        LEFT JOIN
+            task_assignees ta ON t.id = ta.task_id
+        LEFT JOIN
+            users u ON ta.user_id = u.id
+    </select>
+
     <!-- 更新 -->
     <update id="update" parameterType="com.example.todo_api.entity.Task">
         UPDATE tasks 

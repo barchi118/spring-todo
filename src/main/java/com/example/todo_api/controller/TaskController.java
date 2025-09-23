@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.todo_api.dto.TaskCreateForm;
 import com.example.todo_api.dto.TaskPostResponse;
+import com.example.todo_api.dto.TaskResponse;
 import com.example.todo_api.entity.Task;
 import com.example.todo_api.form.TaskUpdateForm;
 import com.example.todo_api.form.TaskDeleteForm;
@@ -33,7 +34,6 @@ import jakarta.validation.Valid;
 // http://localhost:8080/tasksというURLへのリクエストを受け取ったときに実行
 @RequestMapping("/tasks")
 
-
 /**
  * タスク用のコントローラー
  */
@@ -44,7 +44,8 @@ public class TaskController {
     private TaskService taskService;
 
     /**
-     * POSTリクエストを検知しこのcreateTaskメソッドを呼びだす JSONデータが自動的にTaskCreateFormオブジェクトに変換され、formという変数に格納
+     * POSTリクエストを検知しこのcreateTaskメソッドを呼びだす
+     * JSONデータが自動的にTaskCreateFormオブジェクトに変換され、formという変数に格納
      * 
      * @RequestBodyは HTTPリクエストのボディ部分に入っているJSONデータを、Javaオブジェクトに変換
      * 
@@ -65,7 +66,6 @@ public class TaskController {
                 .path("/{id}") // パスに "/{id}" を追加
                 .buildAndExpand(createdTask.getId()) // "{id}" の部分に実際のIDを埋め込む
                 .toUri(); // URIに変換
-
 
         // レスポンスボディ用のオブジェクトを作成し、情報を詰める
         TaskPostResponse responseBody = new TaskPostResponse();
@@ -109,7 +109,7 @@ public class TaskController {
      * @return
      */
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody @Valid TaskUpdateForm form) {
+    public TaskResponse updateTask(@PathVariable Long id, @RequestBody @Valid TaskUpdateForm form) {
         return taskService.updateTask(id, form);
     }
 
@@ -126,4 +126,3 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 }
-

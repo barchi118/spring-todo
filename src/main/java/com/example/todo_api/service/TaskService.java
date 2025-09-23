@@ -80,7 +80,6 @@ public class TaskService {
         }
     }
 
-
     /**
      * 更新処理
      * 
@@ -88,7 +87,7 @@ public class TaskService {
      * @param form
      * @return
      */
-    public Task updateTask(Long id, TaskUpdateForm form) {
+    public TaskResponse updateTask(Long id, TaskUpdateForm form) {
         // まず更新対象のタスクが存在するかチェック
         Task task = findById(id);
         if (task == null) {
@@ -103,16 +102,25 @@ public class TaskService {
         // 更新を実行し、実際に更新された行数を取得
         int affectedRows = taskMapper.update(task);
 
-        // 4楽観ロックの競合をチェック
+        // 楽観ロックの競合をチェック
         if (affectedRows == 0) {
             // 更新件数が0件の場合、WHERE句のversionが一致しなかったことを意味する
             throw new OptimisticLockException(
                     "Optimistic lock conflict: The task was updated by another user.");
         }
 
-        return task;
-    }
+        // 中間テーブルの更新処理
+        userMapper.detachAllFromTask(id);
 
+        if (form.getAssigneeIds() != null) {
+            for (Long userId : form.getAssigneeIds()) {
+                // (ここで事前にuserIdが存在するかチェックするロジックを追加すると、より堅牢になります)
+                userMapper.assignToTask(task.getId(), userId);
+            }
+        }
+
+        return convertToResponse(task);
+    }
 
     /**
      * 削除用ビジネスロジック
@@ -151,5 +159,3 @@ public class TaskService {
         return response;
     }
 }
-
-

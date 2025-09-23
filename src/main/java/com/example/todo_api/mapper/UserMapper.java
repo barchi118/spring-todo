@@ -1,6 +1,8 @@
 package com.example.todo_api.mapper;
 
 import com.example.todo_api.entity.User;
+
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -24,4 +26,9 @@ public interface UserMapper {
     /** タスクと担当者を中間テーブルで紐付ける */
     @Insert("INSERT INTO task_assignees (task_id, user_id) VALUES (#{taskId}, #{userId})")
     void assignToTask(@Param("taskId") Long taskId, @Param("userId") Long userId);
+    
+
+     @Delete("DELETE FROM task_assignees WHERE task_id = #{taskId}")
+    void detachAllFromTask(@Param("taskId") Long taskId);
+
 }

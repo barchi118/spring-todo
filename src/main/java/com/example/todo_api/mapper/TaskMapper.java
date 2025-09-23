@@ -24,7 +24,6 @@ public interface TaskMapper {
 
 
     // 全てのタスクを取得するメソッドを追加
-    @Select("SELECT * FROM tasks ORDER BY id")
     List<Task> findAll();
 
     // 特定の1件のタスクを取得
